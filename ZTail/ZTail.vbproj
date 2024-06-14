@@ -70,6 +70,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOHelper\OutputMethods.vb" />
     <Compile Include="MainModule.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -88,7 +89,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Switch\CommandLineSwitch.vb" />
-    <Compile Include="IOHelper\OutputMethods.vb" />
     <Compile Include="Switch\SwitchAnalyzer.vb" />
   </ItemGroup>
   <ItemGroup>

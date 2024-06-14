@@ -4,6 +4,7 @@ Imports Tail.ApplicationSwitch
 Imports Xunit
 
 Namespace ZTailTest
+
     Public Class AnalysisTest
 
         <Fact>
