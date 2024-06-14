@@ -88,7 +88,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Switch\CommandLineSwitch.vb" />
-    <Compile Include="Switch\OutputMethods.vb" />
+    <Compile Include="IOHelper\OutputMethods.vb" />
     <Compile Include="Switch\SwitchAnalyzer.vb" />
   </ItemGroup>
   <ItemGroup>

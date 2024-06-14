@@ -1,7 +1,9 @@
 ﻿Option Strict On
 Option Explicit On
+
 Imports System.IO
-Imports System.Text
+Imports Tail.IOHelper
+Imports Tail.ApplicationSwitch
 
 ''' <summary>アプリケーションのエントリーポイントを提供します。</summary>
 Public Module MainModule
@@ -23,6 +25,11 @@ Public Module MainModule
             SetSwitch(FILE_SW, "f"c, description:="ファイルの追記を監視する").
             SetSwitch(ENCODE_SW, "e"c, "encode", valueCount:=1, valueName:="encode", description:="文字コードを指定する(shift-jis,UTF-8など)").
             Parse()
+
+        ' Help、Version指定、もしくはエラーならば終了
+        If analysis.IsHelp OrElse analysis.IsVersion OrElse analysis.IsError Then
+            System.Environment.Exit(0)
+        End If
 
         ' 出力行数を読み込む
         Dim lineCount As Integer = 10

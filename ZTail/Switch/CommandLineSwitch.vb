@@ -1,26 +1,38 @@
 ﻿Option Strict On
 Option Explicit On
-Imports Tail.SwitchAnalyzer
 
-''' <summary>コマンドラインスイッチを表します。</summary>
-Public NotInheritable Class CommandLineSwitch
+Namespace ApplicationSwitch
 
-    Public ReadOnly Property Name As String
+    ''' <summary>コマンドラインスイッチを表します。</summary>
+    Public NotInheritable Class CommandLineSwitch
 
-    Public Property SwitchChar As Char?
+        ''' <summary>スイッチの名前です。</summary>
+        Public ReadOnly Property Name As String
 
-    Public Property SwitchName As String
+        ''' <summary>短いスイッチです。</summary>
+        Public Property SwitchChar As Char?
 
-    Public Property ValueCount As Integer
+        ''' <summary>長いスイッチです。</summary>
+        Public Property SwitchName As String
 
-    Public Property ValueName As String
+        ''' <summary>引数の数です（マイナス値なら引数の数は無制限です）</summary>
+        Public Property ValueCount As Integer
 
-    Public Property Required As Boolean
+        ''' <summary>引数の名前です（Helpで表示）</summary>
+        Public Property ValueName As String
 
-    Public Property Description As String
+        ''' <summary>引数が必須ならば真です。</summary>
+        Public Property Required As Boolean
 
-    Public Sub New(name As String)
-        Me.Name = name
-    End Sub
+        ''' <summary>スイッチの説明です。</summary>
+        Public Property Description As String
 
-End Class
+        ''' <summary>コンストラクタ。</summary>
+        ''' <param name="name">スイッチ名。</param>
+        Public Sub New(name As String)
+            Me.Name = name
+        End Sub
+
+    End Class
+
+End Namespace
