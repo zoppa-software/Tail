@@ -6,10 +6,6 @@ Namespace ApplicationSwitch
     ''' <summary>コマンドラインスイッチを表します。</summary>
     Public NotInheritable Class CommandLineSwitch
 
-        Private Shared mUniqueCounter As Integer = 0
-
-        Private ReadOnly mUnique As Integer = System.Threading.Interlocked.Increment(mUniqueCounter)
-
         ''' <summary>スイッチの名前です。</summary>
         Public ReadOnly Property Name As String
 
@@ -34,13 +30,24 @@ Namespace ApplicationSwitch
         ''' <summary>コンストラクタ。</summary>
         ''' <param name="name">スイッチ名。</param>
         Public Sub New(name As String)
-            Me.mUnique = System.Threading.Interlocked.Increment(mUniqueCounter)
             Me.Name = name
         End Sub
 
+        ''' <summary>等価比較を行います。</summary>
+        ''' <param name="obj">比較対象。</param>
+        ''' <returns>比較結果。</returns>
+        Public Overrides Function Equals(ByVal obj As Object) As Boolean
+            If obj IsNot Nothing AndAlso Me.GetType() Is obj.GetType() Then
+                Return Me.Name = CType(obj, CommandLineSwitch).Name
+            Else
+                Return False
+            End If
+        End Function
 
+        ''' <summary>ハッシュコード値を取得します。</summary>
+        ''' <returns>ハッシュコード値。</returns>
         Public Overrides Function GetHashCode() As Integer
-            Return Me.Name.GetHashCode() Xor Me.mUnique.GetHashCode()
+            Return Me.Name.GetHashCode()
         End Function
 
     End Class
