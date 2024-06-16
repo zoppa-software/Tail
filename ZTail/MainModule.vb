@@ -8,12 +8,16 @@ Imports Tail.ApplicationSwitch
 ''' <summary>アプリケーションのエントリーポイントを提供します。</summary>
 Public Module MainModule
 
+    ''' <summary>行数スイッチ名です。</summary>
     Public Const NUMBER_SW As String = "n"
 
+    ''' <summary>ファイル監視スイッチ名です。</summary>
     Public Const FILE_SW As String = "f"
 
+    ''' <summary>エンコードスイッチ名です。</summary>
     Public Const ENCODE_SW As String = "encode"
 
+    ''' <summary>エントリポイントです。</summary>
     Public Sub Main()
         Dim analysis = SwitchAnalyzer.Create().
             SetDescription("シンプルな Tailコマンド。").
@@ -59,7 +63,7 @@ Public Module MainModule
             Dim file As New FileInfo(fPath)
             If file.Exists Then
                 If analysis.GetParameters().Length > 1 Then
-                    WriteLine("===== {file.FullName} =====")
+                    WriteLine($"===== {file.FullName} =====")
                 End If
 
                 ' 最初の行出力を行う
@@ -84,6 +88,9 @@ Public Module MainModule
 
     ''' <summary>最初の行出力を行う。</summary>
     ''' <param name="path">対象ファイル。</param>
+    ''' <param name="enc">エンコード。</param>
+    ''' <param name="lineCount">出力行数。</param>
+    ''' <returns>最初のファイルのサイズ。</returns>
     Private Function FirstTail(ByVal path As String, enc As Text.Encoding, lineCount As Integer) As Long
         Dim lastPoint As Long = 0
         Try
@@ -92,7 +99,8 @@ Public Module MainModule
                 ' 最初のファイルサイズを保持する
                 lastPoint = fs.Length
 
-                ' シークした位置以降の文字列を取得
+                ' 設定した行数分キャッシュに保持
+                Dim lastLf = True
                 Using sr As New StreamReader(fs, enc)
                     Do While sr.Peek() <> -1
                         Dim ln = sr.ReadLine()
@@ -102,12 +110,21 @@ Public Module MainModule
                             lines.Dequeue()
                         End If
                     Loop
+
+                    ' 末尾が改行か否か取得
+                    fs.Seek(-1, SeekOrigin.End)
+                    lastLf = (fs.ReadByte() = &HA)
                 End Using
 
                 ' 読み込んだ文字列を出力
-                For Each ln In lines
-                    WriteLine(ln)
+                For i As Integer = 0 To lines.Count - 2
+                    WriteLine(lines(i))
                 Next
+                If lastLf Then
+                    WriteLine(lines(lines.Count - 1))
+                Else
+                    Write(lines(lines.Count - 1))
+                End If
             End Using
         Catch ex As Exception
             ' 空実装
@@ -115,6 +132,11 @@ Public Module MainModule
         Return lastPoint
     End Function
 
+    ''' <summary>初回以後の出力を行う。</summary>
+    ''' <param name="path">対象ファイル。</param>
+    ''' <param name="enc">エンコード。</param>
+    ''' <param name="lastPoint">読み取ったときのファイルの長さ。</param>
+    ''' <returns>読み取った文字列。</returns>
     Private Function NextTail(ByVal path As String, enc As Text.Encoding, ByRef lastPoint As Long) As String
         Dim res As String = ""
         Try
